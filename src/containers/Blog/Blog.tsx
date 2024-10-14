@@ -9,14 +9,45 @@ const Blog = () => {
     const [newAuthor, setNewAuthor] = useState('');
 
     let interval: null | ReturnType<typeof setInterval> = null;
-    let lastMessageDatetime= '' ;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const data = await response.json() as BlogPost[];
+
+                    setPosts(data);
+                }
+
+            } catch (error) {
+                console.error("Ошибка при загрузке данных:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+
 
 
 
 
     return (
         <div className='container'>
+            <div className="inner-container">
+                <div className="Posts">
 
+                </div>
+                <div className="Posts-Get">
+                    {posts.map(post => (
+                        <PostCard datetime={post.datetime} message={post.message} author={post.author} key={post.id}/>
+                    ))}
+                </div>
+
+
+            </div>
+        </div>
     );
 };
 
